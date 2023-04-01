@@ -5,12 +5,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xh.routine.dpac.base.BaseResult;
-import com.xh.routine.dpac.dto.UserInfoDTO;
+import com.xh.routine.dpac.dto.DpacUserInfoDTO;
 import com.xh.routine.dpac.entity.DpacTicketInfoEntity;
 import com.xh.routine.dpac.enums.DpacTicketStatusEnum;
 import com.xh.routine.dpac.service.DpacTicketInfoService;
 import com.xh.routine.dpac.mapper.DpacTicketInfoMapper;
-import com.xh.routine.dpac.service.UserInfoService;
+import com.xh.routine.dpac.service.DpacUserInfoService;
 import com.xh.routine.dpac.utils.BeanUtil;
 import com.xh.routine.dpac.vo.DpacTicketInfoVO;
 import org.slf4j.Logger;
@@ -37,7 +37,7 @@ public class DpacTicketInfoServiceImpl extends ServiceImpl<DpacTicketInfoMapper,
     @Autowired
     private DpacTicketInfoMapper dpacTicketInfoMapper;
     @Autowired
-    private UserInfoService userInfoService;
+    private DpacUserInfoService dpacUserInfoService;
     @Autowired
     private DpacTicketInfoService dpacTicketInfoService;
 
@@ -60,7 +60,7 @@ public class DpacTicketInfoServiceImpl extends ServiceImpl<DpacTicketInfoMapper,
     @Override
     @Transactional(rollbackFor = Exception.class)
     public BaseResult assignTicket(DpacTicketInfoVO dpacTicketInfoVO) throws Exception {
-        UserInfoDTO currUserInfo = userInfoService.getCurrUserInfo();
+        DpacUserInfoDTO currUserInfo = dpacUserInfoService.getCurrUserInfo();
         if (ObjectUtils.isEmpty(dpacTicketInfoVO)) {
             log.info("工单处理失败，未传入待处理工单信息，userInfo:[{}]", currUserInfo);
             return BaseResult.defaultFail("工单处理失败，未传入工单信息");
@@ -83,7 +83,7 @@ public class DpacTicketInfoServiceImpl extends ServiceImpl<DpacTicketInfoMapper,
             log.info("更新工单状态失败，未传入工单信息");
             return BaseResult.defaultFail("更新工单状态失败");
         }
-        UserInfoDTO currUserInfo = userInfoService.getCurrUserInfo();
+        DpacUserInfoDTO currUserInfo = dpacUserInfoService.getCurrUserInfo();
         DpacTicketInfoEntity ticketInfoEntity = getOneById(dpacTicketInfoVO.getId());
         if (ObjectUtils.isEmpty(ticketInfoEntity)) {
             log.info("更新工单失败，未根据id找到当前工单信息，dpacTicketInfoVO:[{}], userInfo:[{}]", dpacTicketInfoVO, currUserInfo);
@@ -94,7 +94,7 @@ public class DpacTicketInfoServiceImpl extends ServiceImpl<DpacTicketInfoMapper,
         ticketInfoEntity.setAssignedUserGroupId(currUserInfo.getGroupId());
         ticketInfoEntity.setProcessTime(new Date());
         if (dpacTicketInfoMapper.updateById(ticketInfoEntity) < 1) {
-            log.info("更新工单状态时数据库更新失败，dpacTicketInfoVO:[{}], userInfo:[{}]", dpacTicketInfoVO, userInfoService);
+            log.info("更新工单状态时数据库更新失败，dpacTicketInfoVO:[{}], userInfo:[{}]", dpacTicketInfoVO, currUserInfo);
             return BaseResult.defaultFail("工单更新失败，请联系管理员");
         }
         return BaseResult.success();

@@ -3,7 +3,7 @@ package com.xh.routine.dpac.dto;
 import lombok.Data;
 
 @Data
-public class UserInfoDTO {
+public class DpacUserInfoDTO {
 
     private Long id;
     private String username;

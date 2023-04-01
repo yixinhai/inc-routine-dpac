@@ -1,6 +1,6 @@
 package com.xh.routine.dpac.utils;
 
-import com.xh.routine.dpac.dto.UserInfoDTO;
+import com.xh.routine.dpac.dto.DpacUserInfoDTO;
 import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,15 +12,15 @@ public class SessionUtil {
      * @param request
      * @return
      */
-    public static UserInfoDTO getUserInfo(HttpServletRequest request) {
+    public static DpacUserInfoDTO getUserInfo(HttpServletRequest request) {
         Object userId = request.getSession().getAttribute("userId");
         Object username = request.getSession().getAttribute("username");
         if (ObjectUtils.isEmpty(userId) || ObjectUtils.isEmpty(username)) {
             return null;
         }
-        UserInfoDTO userInfoDTO = new UserInfoDTO();
-        userInfoDTO.setId((Long) userId);
-        userInfoDTO.setUsername((String) username);
-        return userInfoDTO;
+        DpacUserInfoDTO dpacUserInfoDTO = new DpacUserInfoDTO();
+        dpacUserInfoDTO.setId((Long) userId);
+        dpacUserInfoDTO.setUsername((String) username);
+        return dpacUserInfoDTO;
     }
 }
