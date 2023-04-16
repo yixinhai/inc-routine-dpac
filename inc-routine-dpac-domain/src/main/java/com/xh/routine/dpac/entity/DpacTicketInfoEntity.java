@@ -2,6 +2,7 @@ package com.xh.routine.dpac.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -41,16 +42,19 @@ public class DpacTicketInfoEntity implements Serializable {
     /**
      * 工单创建时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /**
      * 邮件接收时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date receiveTime;
 
     /**
      * 客服最近处理时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date processTime;
 
     private static final long serialVersionUID = 1L;

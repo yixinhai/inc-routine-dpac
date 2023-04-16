@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.xh.routine.dpac.base.BaseResult;
 import com.xh.routine.dpac.entity.DpacTicketInfoEntity;
 import com.xh.routine.dpac.vo.DpacTicketInfoVO;
+import org.apache.ibatis.session.ResultHandler;
 
 
 /**
@@ -17,6 +18,22 @@ public interface DpacTicketInfoService extends IService<DpacTicketInfoEntity> {
      * @return
      */
     BaseResult listTickets(DpacTicketInfoVO dpacTicketInfoVO);
+
+    /**
+     * 流式查询工单信息，防止OOM
+     * @param dpacTicketInfoVO
+     * @return
+     */
+    BaseResult listTicketsStream(DpacTicketInfoVO dpacTicketInfoVO, ResultHandler<DpacTicketInfoEntity> resultHandler);
+
+    /**
+     * 流式查询冷数据
+     * @param dpacTicketInfoVO
+     * @param resultHandler
+     * @return
+     */
+    BaseResult listColdTicketsStream(DpacTicketInfoVO dpacTicketInfoVO, ResultHandler<DpacTicketInfoEntity> resultHandler);
+
 
     /**
      * 处理订单

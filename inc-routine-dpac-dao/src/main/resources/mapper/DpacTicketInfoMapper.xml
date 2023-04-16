@@ -20,4 +20,26 @@
         assigned_user_id,assigned_user_group_id,create_time,
         receive_time,process_time
     </sql>
+
+    <select id="selectAllStream" resultType="com.xh.routine.dpac.entity.DpacTicketInfoEntity" resultSetType="FORWARD_ONLY">
+        select
+        <include refid="Base_Column_List" />
+        from dpac_ticket_info
+        <where>
+            <if test="record.status != null" >
+                and status = #{record.status,jdbcType=VARCHAR}
+            </if>
+            <if test="record.processTime != null">
+                <![CDATA[and process_time < #{record.processTime,jdbcType=TIMESTAMP}]]>
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAllColdStream" resultType="com.xh.routine.dpac.entity.DpacTicketInfoEntity" resultSetType="FORWARD_ONLY">
+        select
+        <include refid="Base_Column_List" />
+        from dpac_ticket_mark dtm
+        left join dpac_ticket_info dti on dtm.ticket_id = dti.id
+        where dtm.cold_flag = #{record.coldFlag,jdbcType=VARCHAR}
+    </select>
 </mapper>

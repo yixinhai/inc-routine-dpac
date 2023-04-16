@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xh.routine.dpac.mapper.DpacTicketMarkMapper">
+
+    <resultMap id="BaseResultMap" type="com.xh.routine.dpac.entity.DpacTicketMarkEntity">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="ticketId" column="ticket_id" jdbcType="BIGINT"/>
+            <result property="coldFlag" column="cold_flag" jdbcType="VARCHAR"/>
+            <result property="lockThread" column="lock_thread" jdbcType="VARCHAR"/>
+            <result property="lockTime" column="lock_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,ticket_id,cold_flag,
+        lock_thread,lock_time
+    </sql>
+
+    <select id="selectAllSingleStream" resultType="com.xh.routine.dpac.entity.DpacTicketMarkEntity" resultSetType="FORWARD_ONLY">
+        select
+        <include refid="Base_Column_List" />
+        from dpac_ticket_mark
+        <where>
+            <if test="record.coldFlag != null">
+                and cold_flag = #{record.coldFlag,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+</mapper>

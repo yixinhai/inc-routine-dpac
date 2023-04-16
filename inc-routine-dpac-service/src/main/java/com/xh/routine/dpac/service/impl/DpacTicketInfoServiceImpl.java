@@ -13,6 +13,7 @@ import com.xh.routine.dpac.mapper.DpacTicketInfoMapper;
 import com.xh.routine.dpac.service.DpacUserInfoService;
 import com.xh.routine.dpac.utils.BeanUtil;
 import com.xh.routine.dpac.vo.DpacTicketInfoVO;
+import org.apache.ibatis.session.ResultHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,25 @@ public class DpacTicketInfoServiceImpl extends ServiceImpl<DpacTicketInfoMapper,
         queryWrapper.orderByDesc("create_time");
         Page<DpacTicketInfoEntity> ticketEntityList = dpacTicketInfoMapper.selectPage(new Page<>(pageNum, pageSize), queryWrapper);
         return BaseResult.success().data(ticketEntityList);
+    }
+
+    @Override
+    public BaseResult listTicketsStream(DpacTicketInfoVO dpacTicketInfoVO, ResultHandler<DpacTicketInfoEntity> resultHandler) {
+        if (ObjectUtils.isEmpty(dpacTicketInfoVO) || ObjectUtils.isEmpty(resultHandler)) {
+            log.info("流式查新工单信息时未传入查询参数，dpacTicketInfoVO:[{}], resultHandler:[{}]", dpacTicketInfoVO, resultHandler);
+            return BaseResult.defaultFail();
+        }
+        dpacTicketInfoMapper.selectAllStream(dpacTicketInfoVO, resultHandler);
+        return BaseResult.success();
+    }
+
+    @Override
+    public BaseResult listColdTicketsStream(DpacTicketInfoVO dpacTicketInfoVO, ResultHandler<DpacTicketInfoEntity> resultHandler) {
+        if (ObjectUtils.isEmpty(dpacTicketInfoVO) || ObjectUtils.isEmpty(resultHandler)) {
+            log.info("流式查新工单信息时未传入查询参数，dpacTicketInfoVO:[{}], resultHandler:[{}]", dpacTicketInfoVO, resultHandler);
+            return BaseResult.defaultFail();
+        }
+        return null;
     }
 
     @Override
